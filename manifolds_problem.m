@@ -71,8 +71,15 @@ xyorigin=[0 0];
 % Calcular distancia dos manifold aos poços
 
 
+
+
 % Produto da distancia X Volume de Aço/m
 % utilizar V_pm V_mt
+
+
+% Retorno de Vol_aço[1xPopsize]
+% Lembrar que Vol_aço deve ser um vetor linha do tamanho da população
+% é dizer deve ter 600 elementos
 
 
 
