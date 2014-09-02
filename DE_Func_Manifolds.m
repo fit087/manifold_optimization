@@ -1,7 +1,7 @@
 %  **** DIFFERENTIAL EVOLUTION ****  %
 %       (EVOLUÇÃO DIFERENCIAL)
 %  ********************************  %
-function [f,X] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax)  %adicionar parâmetros de entrada
+function [f,X] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax,tolerancia)  %adicionar parâmetros de entrada
 
 %function [gbest,gbestval,fitcount]= PSO_func(fhd,Dimension,Particle_Number,Max_Gen,VRmin,VRmax,varargin)
 %[gbest,gbestval,fitcount]= PSO_func('f8',3500,200000,30,30,-5.12,5.12)
@@ -54,7 +54,16 @@ end
 % ****************** %
 % ** OPTIMIZATION ** %
 % ****************** %
-for g = 1:GEN % Loop na geração
+% for g = 1:GEN % Loop na geração
+erro=2*tolerancia;
+% GEN=1;
+g=1;
+while(g<=GEN & erro>=tolerancia|erro==0)
+%     g
+     if g>2
+         valorAnterior=Fit(iBest);
+     end
+
     for j = 1:NP % Loop nos indivíduos da população
         
         %**********************************************
@@ -123,17 +132,29 @@ for g = 1:GEN % Loop na geração
         end
 
     end
+   
+    if g>2
+   erro=abs(Fit(iBest)-valorAnterior);
+    end
+        
+    
     rd=mod(g,100);
     if rd==0
+%         erro=abs(Fit(iBest)-valorAnterior);
         disp(['Fitness ', num2str(Fit(iBest)),'   Geração ',num2str(g)]);
     end
+    g=g+1;
 end
 % ************* %
 % ** RESULTS ** %
 % ************* %
+
+
 f = Fit(iBest);
 X = Pop(:,iBest);
  disp(['Melhor Fitness ',num2str(f)]);
+ disp(['Erro ',num2str(erro)]);
+ disp(['Numero Avaliacoes ',num2str(g*NP)]);
 
 % ============================================== %
 
