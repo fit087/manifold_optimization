@@ -70,13 +70,16 @@ otimo(1)=min(Fit(1,:));
 % ****************** %
 % for g = 1:GEN % Loop na geração
 erro=2*tolerancia;
+contador=0;
+discrepancia(GEN)=0;
+erro_do_erro=1;
 % GEN=1;
-g=1;
-while(g<=GEN & erro>=tolerancia|erro==0)
+g=1;    %------------------------Verificar no PSO i=2
+while(g<=GEN && (abs(erro)>=tolerancia||erro==0||abs(erro_do_erro)>=1))
 %     g
-     if g>2
-         valorAnterior=Fit(iBest);
-     end
+%      if g>2
+%          valorAnterior=Fit(iBest);
+%      end
 
     for j = 1:NP % Loop nos indivíduos da população
         
@@ -147,14 +150,24 @@ while(g<=GEN & erro>=tolerancia|erro==0)
 
     end
    
-    if g>2
-   erro=abs(Fit(iBest)-valorAnterior);
-    end
+%     if g>2
+%    erro=abs(Fit(iBest)-valorAnterior);
+%     end
     
     rd=mod(g,100);
     if rd==0
+        contador=contador+1;
+%         erro=(otimo(g-1)-otimo(g-99));
+        erro=(otimo(g)-otimo(g-99));
+        discrepancia(contador)=erro;
+        erro_do_erro=1;
+        if(contador>=2)
+            erro_do_erro=discrepancia(contador)-discrepancia(contador-1);
+        end
 %         erro=abs(Fit(iBest)-valorAnterior);
-        disp(['Fitness ', num2str(Fit(iBest)),'   Geração ',num2str(g)]);
+%         disp(['Fitness ', num2str(Fit(iBest)),'   Geração ',num2str(g)]);
+%         disp(['Fitness ', num2str(gbestval),'   Geração ',num2str(i),'  Erro   ',num2str(erro)]);
+        disp(['Fitness ', num2str(Fit(iBest)),'   Geração ',num2str(g),'  Erro   ',num2str(erro), '     Erro do e ',num2str(erro_do_erro)]);
     end
     g=g+1;
 end
