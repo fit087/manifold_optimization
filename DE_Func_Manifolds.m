@@ -15,7 +15,7 @@
 %******************************************
 
 
-function [f,X,FES] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax,tolerancia)  %adicionar parâmetros de entrada
+function [f,X,FES,otimo,media] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax,tolerancia)  %adicionar parâmetros de entrada
 
 %function [gbest,gbestval,fitcount]= PSO_func(fhd,Dimension,Particle_Number,Max_Gen,VRmin,VRmax,varargin)
 %[gbest,gbestval,fitcount]= PSO_func('f8',3500,200000,30,30,-5.12,5.12)
@@ -62,6 +62,9 @@ for j = 1:NP % initialize each individual
     Fit(1,j) = feval(fhd,Pop(:,j)); 
     
 end
+
+media(1)=mean(Fit(1,:));
+otimo(1)=min(Fit(1,:));
 % ****************** %
 % ** OPTIMIZATION ** %
 % ****************** %
@@ -138,6 +141,9 @@ while(g<=GEN & erro>=tolerancia|erro==0)
                 iBest = j ; % update the best’s index
             end
         end
+        
+        media(g)=mean(Fit);
+        otimo(g)=min(Fit);
 
     end
    
@@ -161,6 +167,7 @@ FES=g*NP;
  disp(['Melhor Fitness ',num2str(f)]);
  disp(['Erro ',num2str(erro)]);
  disp(['Numero Avaliacoes ',num2str(FES)]);
+ plot(otimo)
 
 % ============================================== %
 
