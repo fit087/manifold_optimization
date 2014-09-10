@@ -1,7 +1,21 @@
 %  **** DIFFERENTIAL EVOLUTION ****  %
 %       (EVOLUÇÃO DIFERENCIAL)
 %  ********************************  %
-function [f,X] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax,tolerancia)  %adicionar parâmetros de entrada
+
+%  Tipo de DE: DE/x/y/z,   onde
+%  
+%  x = vetor base mutado: rand ou best
+%  y = número de diferenças usadas na perturbação do vetor base
+%  z = esquema de cruzamento: binominal ou exponencial
+
+% *****************************************
+%                                         *
+%  TIPO DESTE DE: DE/rand/1/bin           *
+%                                         *
+%******************************************
+
+
+function [f,X,FES] = DE_Func_Manifolds(fhd,Dimension,Pop_Size,Max_Gen,VRmin,VRmax,tolerancia)  %adicionar parâmetros de entrada
 
 %function [gbest,gbestval,fitcount]= PSO_func(fhd,Dimension,Particle_Number,Max_Gen,VRmin,VRmax,varargin)
 %[gbest,gbestval,fitcount]= PSO_func('f8',3500,200000,30,30,-5.12,5.12)
@@ -42,13 +56,10 @@ rand('state',sum(100*clock)); %verificar************************
 for j = 1:NP % initialize each individual
     Pop(:,j) = L + (H-L)*rand(D,1); % within b.constraints
     
-    
-    
     %Fit(1,j) = fnc(Pop(:,j)); % and evaluate fitness
     %e=feval(fhd,pos',varargin{:});
     %Fit(1,j) = feval(fhd,Pop(:,j),varargin{:}); % and evaluate fitness
     Fit(1,j) = feval(fhd,Pop(:,j)); 
-    
     
 end
 % ****************** %
@@ -112,9 +123,6 @@ while(g<=GEN & erro>=tolerancia|erro==0)
         % between trial and current ones
         % calculate fitness of trial individual
         
-       
-        
-        
       
        %f = fnc(X);
        % f = feval(fhd,X,varargin{:}); % and evaluate fitness
@@ -136,7 +144,6 @@ while(g<=GEN & erro>=tolerancia|erro==0)
     if g>2
    erro=abs(Fit(iBest)-valorAnterior);
     end
-        
     
     rd=mod(g,100);
     if rd==0
@@ -148,13 +155,12 @@ end
 % ************* %
 % ** RESULTS ** %
 % ************* %
-
-
 f = Fit(iBest);
 X = Pop(:,iBest);
+FES=g*NP;
  disp(['Melhor Fitness ',num2str(f)]);
  disp(['Erro ',num2str(erro)]);
- disp(['Numero Avaliacoes ',num2str(g*NP)]);
+ disp(['Numero Avaliacoes ',num2str(FES)]);
 
 % ============================================== %
 
