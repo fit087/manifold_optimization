@@ -50,7 +50,11 @@ erro=1;
 
 % for i=2:me
     contador=0;
-while(i<=me&(abs(erro)>10^-3|erro==0))
+%     *******************
+% Modificando
+discrepancia(me)=0;
+% ***********************
+while(i<=me&(abs(erro)>10^-3|erro==0|abs(erro_do_erro)>=1))
 %     while(i<=me&(abs(erro)>eps|erro==0))
 %         i
 
@@ -108,7 +112,16 @@ while(i<=me&(abs(erro)>10^-3|erro==0))
         contador=contador+1;
         erro=(beschi(i-1)-beschi(i-99));
         discrepancia(contador)=erro;
-        disp(['Fitness ', num2str(gbestval),'   Geração ',num2str(i),'  Erro   ',num2str(erro)]);
+        %     *******************
+        % Modificando
+        erro_do_erro=1;
+        if(contador>=2)
+            erro_do_erro=discrepancia(contador)-discrepancia(contador-1);
+%             erro_do_erro=(discrepancia(contador)-discrepancia(contador-1))/discrepancia(contador);
+        end
+        disp(['Fitness ', num2str(gbestval),'   Geração ',num2str(i),'  Erro   ',num2str(erro), '     Erro do e ',num2str(erro_do_erro)]);
+        % ***********************
+%         disp(['Fitness ', num2str(gbestval),'   Geração ',num2str(i),'  Erro   ',num2str(erro)]);
 %         erro
     end
 
