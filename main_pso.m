@@ -1,34 +1,25 @@
-% clear all
-% mex cec14_func.cpp -DWINDOWS
-func_num=1;
-D=20;
-Xmin=-400;
-Xmax=400;
-% pop_size=100;
-pop_size=50;
+%-------------------------------------------------------------%
+%         PROBLEMA DE LOCALIZAÇÃO DE MANIFOLDS (PSO)          %
+%-------------------------------------------------------------%
+clear all
+format compact
+D=20;                      % Dimensões do problema = 20 (10 manifolds com X e Y)
+Xmin=-500;                 % Espaço de busca (x e y mínimo)
+Xmax=500;                  % Espaço de busca (x e y máximo)
+MaxFES=D*10000*1;          % Número Máximo de Avaliações (número alto para deixar parar pela tolerância)
+pop_size=40;               % Tamanho da população
+iter_max=MaxFES/pop_size;  % Numero máximo de gerações
+tolerancia=1e-3;           % Tolerância em unidade de metro cúbico
+runs=51;                    % Número de execuções
+fhd=str2func('Func_Manifolds'); % Chama a função objetivo -> ou fhd=@Func_Manifolds
 
-iter_max=1000;
-runs=1;
-% fhd=str2func('cec14_func');
-fhd=str2func('Func_Manifolds')
-for i=24:24
-%     func_num=i;
-    for j=1:runs
-        i,j,
-%         [gbest,gbestval,FES]= PSO_func(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
-%         [gbest,gbestval,FES]= PSO_func(fhd,D,pop_size,iter_max,Xmin,Xmax);
+disp(['Número Máximo de Gerações: ',num2str(iter_max)]);
+
+for r=1:runs
+        disp(['Rodada Número ',num2str(r)]);
         [gbest,gbestval]= PSO_func(fhd,D,pop_size,iter_max,Xmin,Xmax);
-        xbest(j,:)=gbest;
-        fbest(i,j)=gbestval;
-        fbest(i,j)
-    end
-    f_mean(i)=mean(fbest(i,:));
+        xbest(r,:)=gbest;        % Vetor X ótimo por rodada - Matriz (Num.Rodadas x Dimensao X) 
+        fbest(r,:)=gbestval;     % Vetor Y ótimo por rodada - Matriz (Num.Rodadas x 1) 
+        disp(['Mínimo da Rodada ',num2str(r),' = ',num2str(fbest(r,1))]);
 end
-
-
-
-% for i=1:30
-% eval(['load input_data/shift_data_' num2str(i) '.txt']);
-% eval(['O=shift_data_' num2str(i) '(1:10);']);
-% f(i)=cec14_func(O',i);i,f(i)
-% end
+    f_mean=mean(fbest(r,:));   % Média dos Y de todas as rodadas
