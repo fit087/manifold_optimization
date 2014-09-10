@@ -9,7 +9,7 @@ function [vol_aco]=Func_Manifolds(manifold_matriz)
     %****** PARÂMETROS DE ENTRADA - INPUTS DO PROBLEMA ***********%
     %*************************************************************%
 
-    R=20; % Distância máxima para conexão entre um poço e um manifold
+    R=30; % Distância máxima para conexão entre um poço e um manifold
 
     % Caracteristicas das tubulações
     % LINHA             Diâmetro	Espessura	Are Transversal 
